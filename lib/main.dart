@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:recipes/ApplicationProvider.dart';
 import 'package:recipes/views/auth.dart';
 import 'package:recipes/views/detail.dart';
 import 'package:recipes/views/favorite.dart';
@@ -7,7 +8,13 @@ import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const MyApp());
+
+  runApp(ChangeNotifierProvider(
+    create: (context) => ApplicationProvider(),
+    builder: (context, child) => const MyApp(),
+  ));
+
+  // runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -16,6 +23,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.deepOrange,
           textTheme: GoogleFonts.workSansTextTheme(),
@@ -27,27 +35,51 @@ class MyApp extends StatelessWidget {
         ),
         themeMode: ThemeMode.light,
         routes: {
-          '/userauth': (context) => AuthPage(),
+          '/userauth': (context) {
+            return AuthPage();
+          },
           '/home': (context) => MyHomePage(),
-          '/product': (context) {
-            return ProductPage();
+          '/recipe': (context) {
+            return RecipePage();
           },
           '/profile': (context) {
             return Scaffold();
           },
           '/favorite': (context) => FavoritePage()
         },
-        initialRoute: '/home',
+        initialRoute: '/userauth',
         home: Scaffold(
           appBar: AppBar(
             // backgroundColor: Theme.of(context).,
-            title: Text('Hello'),
+            title: Text('Hello, '),
           ),
-          body: Center(
-            child: ElevatedButton(
-              child: Text('Press'),
-              onPressed: () {},
-            ),
+          body: Column(
+            children: [
+              Center(
+                child: ElevatedButton(
+                  child: Text('Press'),
+                  onPressed: () {},
+                ),
+              ),
+              Consumer<ApplicationProvider>(
+                builder: (context, value, child) {
+                  return Container(
+                    child: Column(
+                      children: [
+                        Text(
+                          value.isUser.toString(),
+                        ),
+                        ElevatedButton(
+                            onPressed: () {
+                              value.isUserLogged = !value.isUser;
+                            },
+                            child: Text('Toogle IsUser'))
+                      ],
+                    ),
+                  );
+                },
+              )
+            ],
           ),
         ));
   }

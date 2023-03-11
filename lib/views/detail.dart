@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class ProductPage extends StatelessWidget {
-  const ProductPage({super.key});
+class RecipePage extends StatelessWidget {
+  const RecipePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return const Placeholder();
   }
 }
