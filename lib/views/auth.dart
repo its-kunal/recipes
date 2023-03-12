@@ -81,6 +81,11 @@ class _AuthPageState extends State<AuthPage> {
               ),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(20),
+                      ),
+                    ),
                     padding: EdgeInsets.fromLTRB(30, 10, 30, 9)),
                 onPressed: () {},
                 child: Text(
@@ -93,13 +98,22 @@ class _AuthPageState extends State<AuthPage> {
               Expanded(child: Text('')),
               Align(
                 alignment: Alignment.bottomCenter,
-                child: Text(
-                  'The Recipes ©️',
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.grey,
-                    fontWeight: FontWeight.w800,
-                  ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'The Recipes ',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.grey,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                    Icon(
+                      Icons.restaurant_menu,
+                      color: Colors.grey,
+                    )
+                  ],
                 ),
               )
             ],

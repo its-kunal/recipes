@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:recipes/ApplicationProvider.dart';
 import 'package:recipes/views/auth.dart';
 import 'package:recipes/views/detail.dart';
 import 'package:recipes/views/favorite.dart';
 import 'package:provider/provider.dart';
+import 'package:recipes/views/home.dart';
+import 'package:recipes/views/profile.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: "lib/.env");
 
   runApp(ChangeNotifierProvider(
     create: (context) => ApplicationProvider(),
@@ -22,7 +26,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return Consumer<ApplicationProvider>(
+      builder: (context, value, child) => MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.deepOrange,
@@ -38,63 +43,20 @@ class MyApp extends StatelessWidget {
           '/userauth': (context) {
             return AuthPage();
           },
-          '/home': (context) => MyHomePage(),
+          '/home': (context) => HomePage(),
           '/recipe': (context) {
             return RecipePage();
           },
           '/profile': (context) {
-            return Scaffold();
+            return MyProfile();
           },
           '/favorite': (context) => FavoritePage()
         },
-        initialRoute: '/userauth',
-        home: Scaffold(
-          appBar: AppBar(
-            // backgroundColor: Theme.of(context).,
-            title: Text('Hello, '),
-          ),
-          body: Column(
-            children: [
-              Center(
-                child: ElevatedButton(
-                  child: Text('Press'),
-                  onPressed: () {},
-                ),
-              ),
-              Consumer<ApplicationProvider>(
-                builder: (context, value, child) {
-                  return Container(
-                    child: Column(
-                      children: [
-                        Text(
-                          value.isUser.toString(),
-                        ),
-                        ElevatedButton(
-                            onPressed: () {
-                              value.isUserLogged = !value.isUser;
-                            },
-                            child: Text('Toogle IsUser'))
-                      ],
-                    ),
-                  );
-                },
-              )
-            ],
-          ),
-        ));
-  }
-}
-
-// GoogleFonts.workSansTextTheme(
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('My Title'),
+        // initialRoute: '/home',
+        home: value.isUser ? HomePage() : AuthPage(),
       ),
     );
   }
 }
+
+// GoogleFonts.workSansTextTheme(
