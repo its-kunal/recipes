@@ -53,7 +53,7 @@ class MyApp extends StatelessWidget {
           '/favorite': (context) => FavoritePage()
         },
         // initialRoute: '/home',
-        home: value.isUser ? HomePage() : AuthPage(),
+        home: HomePage(),
       ),
     );
   }

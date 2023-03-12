@@ -41,7 +41,7 @@ class ApplicationProvider extends ChangeNotifier {
     // favCuisines = prefs.getStringList('favCuisines') ?? [];
     theme = prefs.getBool('theme') ?? true;
     notifyListeners();
-    Recipe.getRandomRecipes();
+    // Recipe.getRandomRecipes();
   }
 
   set isUserLogged(bool k) {
@@ -84,7 +84,7 @@ class Recipe {
   static String apiKey = dotenv.env['API_KEY'] ?? "";
   static String baseUrl = "https://api.spoonacular.com";
 
-  
+
   Recipe(
       int id,
       String title,
