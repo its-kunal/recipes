@@ -4,26 +4,25 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
-List<String> favCuisines = [
-  "Italian",
-  "Indian",
-  "Mexican",
-  "Indian",
-  "Thai",
-  "Chinese",
-  "Caribbean",
-  "Greek"
-];
-String baseUrl = "https://api.spoonacular.com";
-String apiKey = dotenv.env['API_KEY'] ?? "";
-
 class ApplicationProvider extends ChangeNotifier {
   late bool isUser = false;
   late bool theme = true;
   late Map<dynamic, dynamic> user;
   late Map<dynamic, dynamic> favRecipes;
-
+  List<String> favCuisines = [
+    "Italian",
+    "Indian",
+    "Mexican",
+    "Indian",
+    "Thai",
+    "Chinese",
+    "Caribbean",
+    "Greek"
+  ];
+  String baseUrl = "https://api.spoonacular.com";
+  String apiKey = dotenv.env['API_KEY'] ?? "";
   late SharedPreferences prefs;
+
   ApplicationProvider() {
     init();
   }
@@ -82,7 +81,10 @@ class Recipe {
   late int readyInMinutes, servings, id;
   late bool isVegan;
   late List<dynamic> cuisines;
+  static String apiKey = dotenv.env['API_KEY'] ?? "";
+  static String baseUrl = "https://api.spoonacular.com";
 
+  
   Recipe(
       int id,
       String title,
