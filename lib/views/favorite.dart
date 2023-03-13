@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:provider/provider.dart';
 import 'package:recipes/components/bottomBar.dart';
+
+import '../ApplicationProvider.dart';
+import '../components/card.dart';
 
 class FavoritePage extends StatelessWidget {
   const FavoritePage({super.key});
@@ -40,31 +44,57 @@ class FavoritePage extends StatelessWidget {
               SizedBox(
                 height: 20,
               ),
-              Align(
-                child: Text(
-                  'Recipes',
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.grey[800],
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Align(
+                    child: Text(
+                      'Recipes',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.grey[800],
+                      ),
+                    ),
+                    alignment: Alignment.centerLeft,
                   ),
-                ),
-                alignment: Alignment.centerLeft,
+                  Row(
+                    children: [
+                      Consumer<ApplicationProvider>(
+                        builder: (context, value, child) {
+                          return GestureDetector(
+                            onTap: () {
+                              value.clearAllFavRecipes();
+                            },
+                            child: Icon(
+                              Icons.delete_forever,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                          );
+                        },
+                      )
+                    ],
+                  )
+                ],
               ),
               Divider(
                 thickness: 2,
               ),
-              SizedBox(
-                height: 100,
-                child: ListView(
-                  children: List.generate(
-                    6,
-                    (index) => Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(''),
+              Consumer<ApplicationProvider>(
+                builder: (context, value, child) {
+                  return Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: List.generate(
+                          value.favRecipes.length,
+                          (index) => MyCardTile(
+                            r: value.favRecipes[index],
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              ),
+                  );
+                },
+              )
             ],
           ),
         ),

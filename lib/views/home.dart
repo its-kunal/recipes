@@ -3,6 +3,8 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:http/retry.dart';
+import 'package:provider/provider.dart';
+import 'package:recipes/ApplicationProvider.dart';
 
 import '../components/bottomBar.dart';
 import '../components/card.dart';
@@ -45,7 +47,7 @@ class HomePage extends StatelessWidget {
               ),
               SearcgBox(),
               SizedBox(
-                height: 10,
+                height: 20,
               ),
               Align(
                 child: Text(
@@ -60,24 +62,30 @@ class HomePage extends StatelessWidget {
               Divider(
                 thickness: 2,
               ),
-              SizedBox(
-                height: 100,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: List.generate(
-                    6,
-                    (index) => Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: MyCard(index: index),
+              Consumer<ApplicationProvider>(
+                builder: (context, value, child) {
+                  return SizedBox(
+                    height: 100,
+                    child: ListView(
+                      padding: EdgeInsets.only(left: 0, right: 0),
+                      scrollDirection: Axis.horizontal,
+                      children: List.generate(
+                        value.cuisines.length,
+                        (index) => Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: MyCard(
+                              index: index, title: value.cuisines[index]),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
+                  );
+                },
               ),
               Divider(
                 thickness: 2,
               ),
               SizedBox(
-                height: 10,
+                height: 20,
               ),
               Align(
                 child: Text(
@@ -89,14 +97,24 @@ class HomePage extends StatelessWidget {
                 ),
                 alignment: Alignment.centerLeft,
               ),
-              SizedBox(
-                height: 10,
-              ),
               Divider(
                 thickness: 2,
               ),
-              Column(
-                children: [],
+              Consumer<ApplicationProvider>(
+                builder: (context, value, child) {
+                  return Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: List.generate(
+                          value.recipes.length,
+                          (index) => MyCardTile(
+                            r: value.recipes[index],
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                },
               )
             ],
           ),

@@ -46,15 +46,23 @@ class _AuthPageState extends State<AuthPage> {
               SizedBox(
                 height: 20,
               ),
-              TextField(
-                decoration: InputDecoration(
-                    // border: OutlineInputBorder(),
-                    label: Text(
-                  'Enter Name',
-                  style: TextStyle(
-                    fontSize: 20,
-                  ),
-                )),
+              Consumer<ApplicationProvider>(
+                builder: (context, value, child) {
+                  return TextField(
+                    onChanged: (v) {
+                      value.setUserName(v);
+                    },
+                    decoration: InputDecoration(
+                      // border: OutlineInputBorder(),
+                      label: Text(
+                        'Enter Name',
+                        style: TextStyle(
+                          fontSize: 20,
+                        ),
+                      ),
+                    ),
+                  );
+                },
               ),
               SizedBox(
                 height: 20,
@@ -79,21 +87,42 @@ class _AuthPageState extends State<AuthPage> {
               SizedBox(
                 height: 30,
               ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(20),
+              Consumer<ApplicationProvider>(
+                builder: (context, value, child) {
+                  return ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(20),
+                          ),
+                        ),
+                        padding: EdgeInsets.fromLTRB(30, 10, 30, 9)),
+                    onPressed: () {
+                      if (value.name == "" || value.name == null) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Please Enter Name!'),
+                          ),
+                        );
+                      } else if (value.favCuisines.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Please Select Some Cuisines'),
+                          ),
+                        );
+                      } else {
+                        value.setUserTrue();
+                        Navigator.popAndPushNamed(context, "/");
+                      }
+                    },
+                    child: Text(
+                      'Submit',
+                      style: TextStyle(
+                        fontSize: 20,
                       ),
                     ),
-                    padding: EdgeInsets.fromLTRB(30, 10, 30, 9)),
-                onPressed: () {},
-                child: Text(
-                  'Submit',
-                  style: TextStyle(
-                    fontSize: 20,
-                  ),
-                ),
+                  );
+                },
               ),
               Expanded(child: Text('')),
               Align(
@@ -144,17 +173,26 @@ class _CuisinesTypeState extends State<CuisinesType> {
   Widget build(BuildContext context) {
     return Consumer<ApplicationProvider>(
       builder: (context, value, child) {
-        print(value.favCuisines);
-        return (value.favCuisines.isNotEmpty)
+        var ls = value.cuisines;
+        var l = value.favCuisines;
+        return (value.cuisines.isNotEmpty)
             ? Wrap(
                 spacing: 10,
                 runSpacing: 0,
                 children: List.generate(
-                  value.favCuisines.length,
+                  ls.length,
                   (index) => InputChip(
-                    onSelected: (value) {},
+                    selected: l.contains(ls[index]),
+                    onSelected: (v) {
+                      // print(index);
+                      if (v) {
+                        value.addFavCuisine(ls[index]);
+                      } else {
+                        value.removeFavCuisine(ls[index]);
+                      }
+                    },
                     label: Text(
-                      value.favCuisines[index],
+                      ls[index],
                     ),
                   ),
                 ),

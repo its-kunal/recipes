@@ -40,20 +40,14 @@ class MyApp extends StatelessWidget {
         ),
         themeMode: ThemeMode.light,
         routes: {
-          '/userauth': (context) {
-            return AuthPage();
-          },
           '/home': (context) => HomePage(),
-          '/recipe': (context) {
-            return RecipePage();
-          },
           '/profile': (context) {
             return MyProfile();
           },
           '/favorite': (context) => FavoritePage()
         },
         // initialRoute: '/home',
-        home: HomePage(),
+        home: value.isUser ? HomePage() : AuthPage(),
       ),
     );
   }
